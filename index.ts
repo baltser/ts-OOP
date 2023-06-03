@@ -150,3 +150,45 @@ workers[1] = new Contractor('Mary');
 workers.forEach(worker => worker.promote(5))
 /*****************    Перегрузка метода             *****************/
 
+class ProductService_ {
+  getProducts() {
+    console.log(`Get all products`);
+  }
+  getProducts(id: number) {     //error
+    console.log(`Getting the products info for ${id}`)
+  }
+}
+const prodService_ = new ProductService_();
+
+prodService_.getProducts(123);    //  Getting the products info for 123
+prodService_.getProducts();       //  Getting the products info for undefined
+
+console.log('**** Корректный синтаксис для перезагрузки методов ****')
+
+interface Product {
+  id: number;
+  description: string;
+}
+
+class ProductService {
+
+    getProducts(description: string): Product[];    // объявляем допустимую сигнатуру метода 
+    getProducts(id: number): Product;               // объявляем допустимую сигнатуру метода/*можно опустить. они помогают IDE представить лучшие варианты для подстановки*/
+    getProducts(product: number | string): Product[] | Product {
+        if  (typeof product === "number") {
+          console.log(`Getting the product info for id ${product}`);    // Getting the product info for id 345
+                    return { id: product, description: 'great product' };
+        } else if (typeof product === "string")  { 
+          console.log(`Getting product with description ${product}`);   //Getting product with description blue jeans
+          return [{ id: 123, description: 'blue jeans' },
+                  { id: 789, description: 'blue jeans' }];
+        } else {
+        return { id: -1, description: 'Error: getProducts() accept only number or string as args' };
+        }   
+    }
+}
+const prodService = new ProductService();
+
+console.log(prodService.getProducts(345));           // {...}
+console.log(prodService.getProducts('blue jeans'));  // [{...},{...}]
+
