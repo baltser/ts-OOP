@@ -173,7 +173,7 @@ interface Product {
 class ProductService {
 
     getProducts(description: string): Product[];    // объявляем допустимую сигнатуру метода 
-    getProducts(id: number): Product;               // объявляем допустимую сигнатуру метода/*можно опустить. они помогают IDE представить лучшие варианты для подстановки*/
+    getProducts(id: number): Product;               // объявляем допустимую сигнатуру метода/*сигнатуры можно опустить. они помогают IDE представить лучшие варианты для подстановки*/
     getProducts(product: number | string): Product[] | Product {
         if  (typeof product === "number") {
           console.log(`Getting the product info for id ${product}`);    // Getting the product info for id 345
