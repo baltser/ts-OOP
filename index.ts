@@ -294,19 +294,38 @@ class SecretServiceCar implements  Flyable, Swimmable {
   }
 } 
 /////////////////// Программирование через интрфейсы
-class Product {
+interface Product {
   id: number;
   description: string;
 }
-class ProductService {
-  getProducts(): Product[] {
+
+interface IProductService {
+  getProductService(): Product[];
+  getProductById(id: number): Product;
+}
+
+class ProductService implements IProductService {
+  getProductService(): Product[] {
     //Здесь должен находиться код для получения информации
     // о продуктах из реального источника данных.
     return[];
   }
   getProductById (id: number): Product {
-        //Здесь должен находиться код для получения информации
-        // о продуктах из реального источника данных.
+        //здесь идет код для получения продукта по Id.
         return { id: 123, description: 'Good product!'}
   }
 }
+class MockProductService implements IProductService {
+  // Здесь идет другая конкретная реализация методов интерфейса
+}
+function getProductService(isProduction: boolean): IProductService { // фабричная функция, использующая в качестве возвращаемого типа интерфейса
+  if (isProduction) {
+    return new ProductService();
+  } else {
+    return new MockProductService
+  }
+}
+// const productService: IProductService; // константа, имеющая тип интерфейса
+//.....
+const isProd = true; // В реальном приложении это не кодировалось жестко
+
