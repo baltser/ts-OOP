@@ -170,10 +170,10 @@ interface Product {
   description: string;
 }
 
-class ProductService {
+class ProductService_1 {
 
     getProducts(description: string): Product[];    // объявляем допустимую сигнатуру метода 
-    getProducts(id: number): Product;               // объявляем допустимую сигнатуру метода/*сигнатуры можно опустить. они помогают IDE представить лучшие варианты для подстановки*/
+    getProducts(id: number): Product;               // объявляем допустимую сигнатуру метода/*можно опустить. они помогают IDE представить лучшие варианты для подстановки*/
     getProducts(product: number | string): Product[] | Product {
         if  (typeof product === "number") {
           console.log(`Getting the product info for id ${product}`);    // Getting the product info for id 345
@@ -187,8 +187,126 @@ class ProductService {
         }   
     }
 }
-const prodService = new ProductService();
+const prodService = new ProductService_1();
 
 console.log(prodService.getProducts(345));           // {...}
 console.log(prodService.getProducts('blue jeans'));  // [{...},{...}]
+//Перезагрузка конструкторов
+class Product_ {
+  id: number;
+  description: string;
 
+  constructor();
+  constructor(id: number);
+  constructor(id: number, description: string);
+  constructor(id?: number, description?: string){
+        //.........
+  }
+}
+//Один конструктор с опциональным аргументом
+interface ProductProperties {
+  id?: number;
+  decription?: string;
+}
+class ProductsI {
+  id: number;
+  description: string;
+  constructor(properties?: ProductProperties){
+        //.........
+  }
+}
+// Надо прислушиваться к сдравому смыслу. Потому что логика может стать непонятной. В TS редком спользуют перегрузка методов!
+
+/*****************  Работа с интерфейсами   ****************** */
+ // Еслии вам нужен пользователький тип ключающий конструктор, ипользуйте класс; в противном случае используйте интерфейс!
+ interface MotorVihecle {
+ startEngine(): boolean;
+ stopEngine(): boolean;
+ brake(): boolean;
+ accelerate(speed: number): void;
+ honk(howLong: number): void;
+ }
+
+ class Car implements MotorVihecle {
+  startEngine(): boolean {
+    return true;
+  }
+  stopEngine(): boolean {
+    return true;
+  }
+  brake(): boolean {
+    return true;
+  }
+  accelerate(speed: number): void {
+    console.log(`Driving faster`)
+  }
+  honk(howLong: number): void{
+    console.log(`Beep beep yeah!`)
+  }
+ }
+const car /*: Car | MotorVigecle */ = new Car();
+car.startEngine();
+///////////////////////
+
+interface Flyable {
+  fly(howHigh: number);
+  land();
+}
+interface Swimmable {
+  swim(howFar: number);
+}
+// class SecretServiceCar implements MotorVihecle, Flyable, Swimmable {
+//   // Реализовать все методы из трех интерфейсов
+// } 
+// class SecretServiceCar extends Car implements Flyable, Swimmable {
+//   //   // Реализовать все методы из двух интерфейсов
+//   } 
+
+////////////Расширение интерфейсов
+interface Flyable extends MotorVihecle {
+  fly(wohHigh: number);
+  land();
+}
+class SecretServiceCar implements  Flyable, Swimmable {
+  startEngine(): boolean {           //  MotorVihecle
+    return true;
+  }
+  stopEngine(): boolean {
+    return true;
+  }
+  brake(): boolean {
+    return true;
+  }
+  accelerate(speed: number): void {
+    console.log(`Driving faster`)
+  }
+  honk(howLong: number): void{
+    console.log(`Beep beep yeah!`)
+  }
+  fly(howHigh: number){                       //Flyable
+    console.log(`Flying ${howHigh} feet high`)
+  }
+  land(){
+    console.log(`Landing. Fasten your belts.`)
+  }
+  swim(howFar: number) {                    //Swimmable
+    console.log(`Swimming ${howFar} feet.`)
+  }
+} 
+/////////////////// Программирование через интрфейсы
+class Product {
+  id: number;
+  description: string;
+}
+class ProductService {
+  getProducts(): Product[] {
+    //Здесь должен находиться код для получения информации
+    // о продуктах из реального источника данных.
+    return[];
+  }
+  getProductById (id: number): Product {
+        //Здесь должен находиться код для получения информации
+        // о продуктах из реального источника данных.
+        return { id: 123, description: 'Good product!'}
+  }
+}
